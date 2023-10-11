@@ -2,12 +2,15 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    private static int yourWins = 0;
+    private static int computerWins = 0;
+    private static int otherPlayerWins = 0;
+
     public static void main(String[] args) {
 
-        int yourWins = 0;
-        int computerWins = 0;
-        int otherPlayerWins = 0;
+
         boolean playAgain = true;
+        String other_name;
         Scanner scanner = new Scanner(System.in);
         System.out.println("What is your name? ");
         String input_name = scanner.nextLine();
@@ -22,12 +25,11 @@ public class Main {
 
             if(opponent){//If opponent = true, then player wants to play against other player
                 System.out.println("What is the other player's name? ");
-                String other_name = scanner.nextLine();
+                other_name = scanner.nextLine();
                 System.out.println("Hello to the other player " + other_name);
-
-                playAgainstAnotherPlayer(board, scanner, yourWins, otherPlayerWins, input_name, other_name);
+                playAgainstAnotherPlayer(board, scanner, input_name, other_name);
             }else{
-                playAgainstComputer(board, scanner, yourWins, computerWins, input_name);
+                playAgainstComputer(board, scanner, input_name);
             }
 
             System.out.println("Want to play again? y/n");
@@ -35,7 +37,12 @@ public class Main {
             if (answer.equalsIgnoreCase("y")) {
                 System.out.println("Lets do another round!");
             } else if (answer.equalsIgnoreCase("n")) {
-                System.out.println("Computer won " + " times, and you won " +  " times!");
+                if (opponent){
+                    System.out.println(input_name + " won " + yourWins + " times and the other player won " + otherPlayerWins + " times.");
+                }else{
+                    System.out.println("Computer won " + computerWins + " times, and " + input_name + " won " + yourWins + " times.");
+                }
+
                 playAgain = false;
             }else{
                 System.out.println("Invalid input");
@@ -44,35 +51,39 @@ public class Main {
 
     }
 
-    private static void playAgainstComputer(char[][] board, Scanner scanner, int yourWins, int computerWins, String input_name) {
+    private static void playAgainstComputer(char[][] board, Scanner scanner, String input_name) {
         String quickFix = "";
         while (true) {
             yourTurn(board, scanner, input_name);//sending in scanner object and the board
             if (isGameFinished(board, input_name, quickFix)) {
+                yourWins++;
                 break;
             }
             printBoard(board);
             computerTurn(board);
 
             if (isGameFinished(board, input_name, quickFix)) {
+                computerWins++;
                 break;
             }
             printBoard(board);
         }
     }
 
-    private static void playAgainstAnotherPlayer(char[][] board, Scanner scanner, int yourWins, int otherPlayerWins, String input_name, String other_name) {
+    private static void playAgainstAnotherPlayer(char[][] board, Scanner scanner, String input_name, String other_name) {
 
 
         while (true) {
             yourTurn(board, scanner, input_name);//sending in scanner object and the board
             if (isGameFinished(board, input_name, other_name)) {
+                yourWins++;
                 break;
             }
             printBoard(board);
             otherPlayerTurn(board, scanner, other_name);
 
             if (isGameFinished(board, input_name, other_name)) {
+                otherPlayerWins++;
                 break;
             }
             printBoard(board);
@@ -80,7 +91,7 @@ public class Main {
     }
 
     private static void otherPlayerTurn(char[][] board, Scanner scanner, String other_name) {
-        System.out.println(other_name + "s turn!");
+        System.out.println("It is " + other_name + "s turn.");
         String userInput;
         while(true){
             System.out.println("Where do you want to put your piece (1-9)");
@@ -205,7 +216,7 @@ public class Main {
     }
 
     private static void yourTurn(char[][] board, Scanner scanner, String input_name) {
-        System.out.println(input_name + "s turn!");
+        System.out.println("It is " + input_name + "s turn.");
         String userInput;
         while(true){
             System.out.println("Where do you want to put your piece (1-9)");
