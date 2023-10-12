@@ -38,7 +38,7 @@ public class Main {
                 System.out.println("Lets do another round!");
             } else if (answer.equalsIgnoreCase("n")) {
                 if (opponent){
-                    System.out.println(input_name + " won " + yourWins + " times and the other player won " + otherPlayerWins + " times.");
+                    System.out.println(input_name + " won " + yourWins + " times and the other player(s) won " + otherPlayerWins + " times.");
                 }else{
                     System.out.println("Computer won " + computerWins + " times, and " + input_name + " won " + yourWins + " times.");
                 }
@@ -90,7 +90,7 @@ public class Main {
         }
     }
 
-    private static void otherPlayerTurn(char[][] board, Scanner scanner, String other_name) {
+    private static void otherPlayerTurn(char[][] board, Scanner scanner, String other_name) { //lets the other player move their piece
         System.out.println("It is " + other_name + "s turn.");
         String userInput;
         while(true){
@@ -108,22 +108,24 @@ public class Main {
 
     private static boolean chooseOpponent(Scanner scanner) {
         System.out.println("Choose your opponent by pressing 1 or 2: \n" + "1. Another player\n" + "2. Computer");
-        int choice = scanner.nextInt();
+        String choice = scanner.nextLine();
         scanner.nextLine();
 
         switch (choice){
-            case 1:
+            case "1":
                 System.out.println("You chose another player!");
                 return true; //True for player
-            case 2:
+            case "2":
                 System.out.println("You choose computer player!");
                 return false; //False for computer
+            default:
+                System.out.println("Wrong input, you will now play against computer.");
         }
         return false;
     }
 
 
-    private static boolean isGameFinished(char[][] board, String input_name, String other_name) {
+    private static boolean isGameFinished(char[][] board, String input_name, String other_name) { //Checks if three in a row has occured
         if (threeInRow(board, 'X')){
             printBoard(board);
             System.out.println(input_name + " has won!");
@@ -156,7 +158,7 @@ public class Main {
     }
 
 
-    private static boolean threeInRow(char[][] board, char symbol) {
+    private static boolean threeInRow(char[][] board, char symbol) { //Checks all the possible solutions for three in a row
         if ((board[0][0] == symbol && board[0][1] == symbol && board[0][2] == symbol) ||
                 (board[1][0] == symbol && board[1][1] == symbol && board[1][2] == symbol) ||
                 (board[2][0] == symbol && board[2][1] == symbol && board[2][2] == symbol) || //checking rows
@@ -174,13 +176,13 @@ public class Main {
     }
 
 
-    private static void computerTurn(char[][] board) {
+    private static void computerTurn(char[][] board) { //Handles computeras turn
         Random rand = new Random();
         int computerMovePos;
 
         while(true) {
             computerMovePos = rand.nextInt(9) + 1;  //random int between 0-8, then we add + 1
-            if (isSpaceAvailable(board, Integer.toString(computerMovePos))) {
+            if (isSpaceAvailable(board, Integer.toString(computerMovePos))) {//Breaks out of loop when valid place is found
                 break;
             }
         }
@@ -189,7 +191,7 @@ public class Main {
     }
 
 
-    private static boolean isSpaceAvailable(char[][] board, String position) {
+    private static boolean isSpaceAvailable(char[][] board, String position) { //Checks if the space in current playing board is blank ' '.
         switch (position) {
             case "1":
                 return (board[0][0] == ' '); //if the board at place [][] is empty (' '), return true, else false
@@ -215,7 +217,7 @@ public class Main {
         }
     }
 
-    private static void yourTurn(char[][] board, Scanner scanner, String input_name) {
+    private static void yourTurn(char[][] board, Scanner scanner, String input_name) {//Handles my turn
         System.out.println("It is " + input_name + "s turn.");
         String userInput;
         while(true){
@@ -232,7 +234,7 @@ public class Main {
     }
 
 
-    private static void placingPiece(char[][] board, String position, char piece) {
+    private static void placingPiece(char[][] board, String position, char piece) {//Putting the actual piece on the board.
 
         switch(position) {
             case "1":
@@ -266,12 +268,11 @@ public class Main {
                 System.out.println("You entered wrong value");
         }
     }
-
-
+    
 
 
     private static void printBoard(char[][] board) {
-        System.out.println(board[0][0] + "|" + board[0][1] + "|" + board[0][2]);
+        System.out.println(board[0][0] + "|" + board[0][1] + "|" + board[0][2]);//Printing the board
         System.out.println("-+-+-");
         System.out.println(board[1][0] + "|" + board[1][1] + "|" + board[1][2]);
         System.out.println("-+-+-");
